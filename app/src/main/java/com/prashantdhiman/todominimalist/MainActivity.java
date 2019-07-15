@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private FloatingActionButton addFab;
     private ImageView noNewTaskImageView;
+    private LinearLayout lnrLytMenu;
+    private TextView appTitleTextview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -45,18 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.coordinatorLayout);
         addFab = findViewById(R.id.addFab);
-        noNewTaskImageView=findViewById(R.id.noNewTaskImageView);
+        noNewTaskImageView = findViewById(R.id.noNewTaskImageView);
+        //  createdByIconView=findViewById(R.id.createdByIconView);
+        lnrLytMenu = findViewById(R.id.lnrLytMenu);
+        appTitleTextview = findViewById(R.id.appTitleTextview);
 
         listItems = new ArrayList<>();
 
         loadData();
-        int size=listItems.size();
+        int size = listItems.size();
 
 //        Toast.makeText(getApplicationContext(),Integer.toString(size),Toast.LENGTH_SHORT).show();
 
-        if(listItems.isEmpty()){
+        if (listItems.isEmpty()) {
             noNewTaskImageView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             noNewTaskImageView.setVisibility(View.GONE);
         }
 
@@ -70,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), NewTaskActivity.class));
+            }
+        });
+
+        //for 'created by' menu
+        appTitleTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lnrLytMenu.getVisibility() == View.GONE) {
+
+                    lnrLytMenu.setVisibility(View.VISIBLE);
+                } else {
+                    lnrLytMenu.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -121,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         myAdapterObj.notifyDataSetChanged();
-        if(listItems.isEmpty()){
+        if (listItems.isEmpty()) {
             noNewTaskImageView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             noNewTaskImageView.setVisibility(View.GONE);
         }
         saveDataPermanently();
